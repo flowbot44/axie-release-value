@@ -6,10 +6,9 @@ import { useAuthenticator } from "@aws-amplify/ui-react";
 const client = generateClient<Schema>();
 
 export default function App() {
+  const { user, signOut } = useAuthenticator();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  
-  const { signOut } = useAuthenticator();
-    
+      
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
@@ -32,7 +31,7 @@ export default function App() {
 
   return (
     <main>
-      <h1>My todos</h1>
+      <h1>{user?.signInDetails?.loginId}&apos;s todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
@@ -50,5 +49,5 @@ export default function App() {
       </div>
       <button onClick={signOut}>Sign out</button>
     </main>
-  );
+  )
 }
