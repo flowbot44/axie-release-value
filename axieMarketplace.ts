@@ -2,7 +2,7 @@
 
 
 export async function fetchAxieMaterialData(axieId:number) {
-
+    const apiKey = process.env.NEXT_PUBLIC_AXIE_API_KEY;
     const query = {
         query: `
             {
@@ -30,7 +30,7 @@ export async function fetchAxieMaterialData(axieId:number) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': 'pIt8ImWnh8DBXAQKoJ4KamzIvLkeHiT7', // Add your access token if needed
+          'X-API-Key': apiKey!, // Add your access token if needed
         },
         body: JSON.stringify(query),
       })
