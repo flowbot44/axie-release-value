@@ -1,0 +1,30 @@
+/* components/NavBar.module.css */
+
+.nav {
+    background-color: #333;
+    padding: 1rem;
+    color: white;
+  }
+  
+  .navList {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navItem a {
+    color: rgb(222, 152, 236);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+  
+  .navItem a:hover {
+    color: #ffcc00; /* Highlight on hover */
+  }
+  
+  .active {
+    color: #ffcc00; /* Active link color */
+  }

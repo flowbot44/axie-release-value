@@ -6,12 +6,17 @@ import '@aws-amplify/ui-react/styles.css'
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import NavBar from '../components/NavBar';
 
 Amplify.configure(outputs);
 
 export default function App({ Component, pageProps }: AppProps) {
-  return(     
-  <Authenticator>
-    <Component {...pageProps} />
-  </Authenticator>)
+  return(
+  <>
+    <NavBar />     
+    <Authenticator>
+      <Component {...pageProps} />
+    </Authenticator>
+  </>
+  )
 }
