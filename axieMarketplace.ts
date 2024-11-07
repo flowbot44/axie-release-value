@@ -1,5 +1,5 @@
 
-
+const axieApiUrl = 'https://api-gateway.skymavis.com/graphql/axie-marketplace';
 
 export async function fetchAxieMaterialData(axieId:number) {
     const apiKey = process.env.NEXT_PUBLIC_AXIE_API_KEY;
@@ -20,13 +20,60 @@ export async function fetchAxieMaterialData(axieId:number) {
                 results {
                 attributes
                 minPrice
+                name
                 }
             }
             }
         `,
     };
 
-    const response = await fetch('https://api-gateway.skymavis.com/graphql/axie-marketplace', {
+    const response = await fetch(axieApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey!, // Add your access token if needed
+        },
+        body: JSON.stringify(query),
+      })
+    
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log(data)
+    return data;
+}
+
+
+export async function fetchGachaItemData() {
+    const apiKey = process.env.NEXT_PUBLIC_AXIE_API_KEY;
+    const query = {
+        query: `
+            {
+                consumableTokens: erc1155Tokens(
+                    tokenIds: ["1", "2"]
+                    tokenType: Consumable
+                ) {
+                    results {
+                    name
+                    minPrice
+                    }
+                }
+
+                materialTokens: erc1155Tokens(
+                    tokenIds: ["1020847100762815390390123824494327889920"]
+                    tokenType: Material
+                ) {
+                    results {
+                    name
+                    minPrice
+                    }
+                }
+            }
+        `,
+    };
+
+    const response = await fetch(axieApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

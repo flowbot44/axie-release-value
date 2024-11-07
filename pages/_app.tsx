@@ -13,8 +13,9 @@ Amplify.configure(outputs);
 export default function App({ Component, pageProps }: AppProps) {
   return(
   <>
-    <NavBar />     
+      
     <Authenticator>
+    <NavBar />   
       <Component {...pageProps} />
     </Authenticator>
   </>

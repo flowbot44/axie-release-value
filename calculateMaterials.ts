@@ -1,4 +1,5 @@
-import {Axie, ERC1155Token} from './interfaces';
+import {Axie, ERC1155Token, GachaData} from './interfaces';
+import Gacha from './pages/gacha';
 
 // calculateMaterials.ts
 const levels: number[] = [1, 10, 20, 30, 40, 50, 60];
@@ -37,6 +38,37 @@ export function calculateMaterialValue(axieData: Axie, materialMarketPrice:ERC11
         const partClassSum = matchingTokens.reduce((subSum, token) => subSum + token.minPrice * partMats, 0);
         return sum + partClassSum ;
     }, 0);
-    return +(ethTotal / Math.pow(10, 18)).toFixed(5)
+    return +(ethDecimalFormat(ethTotal)).toFixed(5)
 }
 
+
+function ethDecimalFormat(ethTotal: number) {
+    return ethTotal / Math.pow(10, 18);
+}
+
+export function calculateBasicRollValue(gachaData:GachaData | null){
+    const shellOdds = 0.0006667
+    const basicOdds = 1-shellOdds
+    if(!gachaData)
+        return 0
+    
+    const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
+    const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
+    console.log(`basicCoco ${basicCoco} * basicOdds ${basicOdds}) + (shell ${shell} * shellOdds ${shellOdds})`)
+    return ((basicCoco * basicOdds) + (shell * shellOdds))/10
+}
+
+
+export function calculatePremiumRollValue(gachaData:GachaData | null){
+    const shellOdds = 0.002
+    const premiumOdds = 0.85
+    const basicOdds = 1-premiumOdds-shellOdds
+    if(!gachaData)
+        return 0
+    
+    const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
+    const premiumCoco = ethDecimalFormat(gachaData.consumableTokens.results[1].minPrice)
+    const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
+
+    return ((basicCoco * basicOdds) + (premiumCoco * premiumOdds) + (shell * shellOdds))/50
+}

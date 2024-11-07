@@ -1,23 +1,40 @@
 // components/NavBar.tsx
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
-import styles from './NavBar.module.css';
+import Link from "next/link"; // or `next/link` if in Next.js
+import { Authenticator, useAuthenticator, View, Button, Flex, Text } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
 const NavBar: React.FC = () => {
-  const router = useRouter();
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
+
 
   return (
-    <nav className={styles.nav}>
-      <ul className={styles.navList}>
-        <li className={`${styles.navItem} ${router.pathname === '/' ? styles.active : ''}`}>
+    <View as="header" padding="1rem" backgroundColor="neutral.80">
+      <Flex direction="row" alignItems="center" justifyContent="space-between">
+        <Text fontSize="xl" fontWeight="bold">
+          Axie Info
+        </Text>
+        
+        <Flex direction="row" alignItems="center" gap="1rem">
           <Link href="/">Home</Link>
-        </li>
-        <li className={`${styles.navItem} ${router.pathname === '/' ? styles.active : ''}`}>
-          <Link href="/releasevalue">Axie Release</Link>
-        </li>
-      </ul>
-    </nav>
+          <Link href="/releasevalue">Release Value</Link>
+          <Link href="/gacha">Gacha</Link>
+
+          {user ? (
+            <>
+              <Text>Hello, {user?.signInDetails?.loginId}</Text>
+              <Button onClick={signOut}>Sign Out</Button>
+            </>
+          ) : (
+            <Authenticator>
+              {({ signOut }) => (
+                <Button onClick={signOut}>Sign In</Button>
+              )}
+            </Authenticator>
+          )}
+        </Flex>
+      </Flex>
+    </View>
   );
 };
 
