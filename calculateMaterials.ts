@@ -61,14 +61,25 @@ export function calculateBasicRollValue(gachaData:GachaData | null){
 
 export function calculatePremiumRollValue(gachaData:GachaData | null){
     const shellOdds = 0.002
-    const premiumOdds = 0.85
-    const basicOdds = 1-premiumOdds-shellOdds
+    const basicOdds = 0.85
+    const prizeOdds = 0.000003
+    const premiumOdds = 1-basicOdds-shellOdds - prizeOdds
     if(!gachaData)
         return 0
     
     const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
     const premiumCoco = ethDecimalFormat(gachaData.consumableTokens.results[1].minPrice)
     const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
-
-    return ((basicCoco * basicOdds) + (premiumCoco * premiumOdds) + (shell * shellOdds))/50
+    const mysticAxie = ethDecimalFormat(gachaData.mysticAxie.results[0].order.currentPrice)
+    console.log(`basicCoco ${basicCoco} * basicOdds ${basicOdds}) + premCoco ${premiumCoco} * premOdds ${premiumOdds}) + (shell ${shell} * shellOdds ${shellOdds})+ (mystic ${mysticAxie} * mysticOdds ${prizeOdds})`)
+    
+    
+    return (
+        (
+            (basicCoco * basicOdds) + 
+            (premiumCoco * premiumOdds) + 
+            (shell * shellOdds) + 
+            (mysticAxie * prizeOdds)
+        )/50
+    )
 }

@@ -4,6 +4,9 @@ export interface Axie {
       level: number;
     };
     class: string;
+    order: {
+      currentPrice: number
+    };
     parts: {
       class: string;
     }[];
@@ -30,5 +33,8 @@ export interface Data {
     };
     materialTokens: {
       results: ERC1155Token[];
+    };
+    mysticAxie: {
+      results: Axie[];
     };
   }

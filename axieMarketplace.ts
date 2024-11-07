@@ -69,6 +69,13 @@ export async function fetchGachaItemData() {
                     minPrice
                     }
                 }
+                mysticAxie: axies(criteria: {numMystic: 1}, sort: PriceAsc, size: 1) {
+                    results {
+                        order {
+                            currentPrice
+                        }
+                    }
+                }
             }
         `,
     };
