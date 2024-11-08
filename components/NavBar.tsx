@@ -19,6 +19,7 @@ const NavBar: React.FC = () => {
           <Link href="/">Home</Link>
           <Link href="/releasevalue">Release Value</Link>
           <Link href="/gacha">Gacha</Link>
+          <Link href="/crafting">Crafting</Link>
 
           {user ? (
             <>

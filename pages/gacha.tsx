@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchGachaItemData } from  "../axieMarketplace"
-import { GachaData } from '@/interfaces';
 import { calculateBasicRollValue, calculatePremiumRollValue } from '../calculateMaterials'
 import Image from 'next/image';
 

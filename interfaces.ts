@@ -38,3 +38,28 @@ export interface Data {
       results: Axie[];
     };
   }
+
+  export interface CraftingData {
+    consumableTokens: {
+      results: ERC1155Token[];
+    };
+    materialTokens: {
+      results: ERC1155Token[];
+    };
+    exchangeRate: ExchangeRate
+  }
+
+  export interface CraftingItem {
+    name: string;
+    costToMake: number;
+    marketPrice: number;
+    profit: number;
+  };
+
+  export interface ExchangeRate {
+
+      eth: {
+        usd: number;
+      };
+
+  }

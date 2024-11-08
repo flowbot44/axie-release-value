@@ -1,4 +1,5 @@
-import {Axie, ERC1155Token, GachaData} from './interfaces';
+import {Axie, CraftingData, CraftingItem, ERC1155Token, GachaData} from './interfaces';
+import Crafting from './pages/crafting';
 import Gacha from './pages/gacha';
 
 // calculateMaterials.ts
@@ -41,38 +42,45 @@ export function calculateMaterialValue(axieData: Axie, materialMarketPrice:ERC11
     return +(ethDecimalFormat(ethTotal)).toFixed(5)
 }
 
+function ethDecimalFormatUsd(ethTotal: number,ethUsdPrice:number){
+    return ethToUsd(ethDecimalFormat(ethTotal), ethUsdPrice)
+}
 
 function ethDecimalFormat(ethTotal: number) {
     return ethTotal / Math.pow(10, 18);
 }
 
+function ethToUsd(ethValue: number, ethUsdPrice:number){
+    return ethValue * ethUsdPrice
+}
+
 export function calculateBasicRollValue(gachaData:GachaData | null){
-    const shellOdds = 0.0006667
-    const basicOdds = 1-shellOdds
     if(!gachaData)
         return 0
-    
+
+    const shellOdds = 0.0006667
+    const basicOdds = 1-shellOdds
+
     const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
     const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
-    console.log(`basicCoco ${basicCoco} * basicOdds ${basicOdds}) + (shell ${shell} * shellOdds ${shellOdds})`)
+    
     return ((basicCoco * basicOdds) + (shell * shellOdds))/10
 }
 
 
 export function calculatePremiumRollValue(gachaData:GachaData | null){
+    if(!gachaData)
+        return 0
+    
     const shellOdds = 0.002
     const basicOdds = 0.85
     const prizeOdds = 0.000003
     const premiumOdds = 1-basicOdds-shellOdds - prizeOdds
-    if(!gachaData)
-        return 0
     
     const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
     const premiumCoco = ethDecimalFormat(gachaData.consumableTokens.results[1].minPrice)
     const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
     const mysticAxie = ethDecimalFormat(gachaData.mysticAxie.results[0].order.currentPrice)
-    console.log(`basicCoco ${basicCoco} * basicOdds ${basicOdds}) + premCoco ${premiumCoco} * premOdds ${premiumOdds}) + (shell ${shell} * shellOdds ${shellOdds})+ (mystic ${mysticAxie} * mysticOdds ${prizeOdds})`)
-    
     
     return (
         (
@@ -83,3 +91,40 @@ export function calculatePremiumRollValue(gachaData:GachaData | null){
         )/50
     )
 }
+
+export function calculateCraftingInfo(craftingData:CraftingData | null){
+    const items: CraftingItem[] = []
+    const premiumCoco = craftingData?.consumableTokens.results.find(item => item.name === "Premium Cocochoco")
+    const coco = craftingData?.consumableTokens.results.find(item => item.name === "Cocochoco")
+    const superCoco = craftingData?.consumableTokens.results.find(item => item.name === "Super Cocochoco")
+    const darkFlame =craftingData?.consumableTokens.results.find(item => item.name === "Dark Flame")
+
+    const plantMemento = craftingData?.materialTokens.results.find(item => item.name === "Plant Memento") 
+    const aquaMemento = craftingData?.materialTokens.results.find(item => item.name === "Aquatic Memento")
+  
+    const ethPrice = craftingData?.exchangeRate.eth.usd
+
+    items.push(createCraftingItem(darkFlame!.name,calculateDarkFlame(plantMemento!,aquaMemento!,premiumCoco!,ethPrice!),ethDecimalFormatUsd(darkFlame!.minPrice,ethPrice!)))
+    items.push(createCraftingItem(superCoco!.name,calculateSuperCoco(premiumCoco!,coco!,ethPrice!),ethDecimalFormatUsd(superCoco!.minPrice,ethPrice!)))
+    
+    return items
+}
+
+const createCraftingItem = (name: string, costToMake: number, marketPrice: number): CraftingItem => {
+    return {
+      name,
+      costToMake,
+      marketPrice,
+      profit: marketPrice - costToMake,
+    };
+  };
+
+function calculateSuperCoco(premiumCoco: ERC1155Token, coco: ERC1155Token, ethPrice: number): number {
+    return ethDecimalFormatUsd(premiumCoco.minPrice *10 + coco.minPrice *40,ethPrice) + 2.5  
+}
+
+function calculateDarkFlame(plantMemento: ERC1155Token, aquaMemento: ERC1155Token, premiumCoco: ERC1155Token, ethPrice: number): number {
+    return ethDecimalFormatUsd(plantMemento.minPrice *100 + aquaMemento.minPrice *50 + premiumCoco.minPrice*2,ethPrice) + 1.5 
+
+}
+
