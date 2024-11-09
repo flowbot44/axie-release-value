@@ -34,14 +34,14 @@ const Gacha: React.FC = () => {
       <Image 
               src={premiumRollValue >= basicRollValue ? 'https://cdn.axieinfinity.com/marketplace-website/asset-icon/pounch-2.png' : 'https://cdn.axieinfinity.com/marketplace-website/asset-icon/pounch-1.png'}
               width={84} height={79} alt={'Gacha Pouch to roll'}/>
-      <h2>Expected Value Per Slip</h2>
+      <h2>Expected Value</h2>
       {error ? (
         <p style={{ color: 'red' }}>{error}</p>
       ) : (
         <>
         
-          <p><strong>Basic Roll :</strong> {basicRollValue !== null ? `${basicRollValue.toFixed(7)} ETH` : 'Loading...'}</p>
-          <p><strong>Premium Roll :</strong> {premiumRollValue !== null ? `${premiumRollValue.toFixed(7)} ETH` : 'Loading...'}</p>
+          <p><strong>Basic Roll per 10 slips:</strong> {basicRollValue !== null ? `$${basicRollValue.toFixed(3)}` : 'Loading...'}</p>
+          <p><strong>Premium Roll per 10 slips:</strong> {premiumRollValue !== null ? `$${premiumRollValue.toFixed(3)}` : 'Loading...'}</p>
         </>
       )}
     </div>

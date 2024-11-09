@@ -37,6 +37,7 @@ export interface Data {
     mysticAxie: {
       results: Axie[];
     };
+    exchangeRate: ExchangeRate
   }
 
   export interface CraftingData {

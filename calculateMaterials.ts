@@ -1,6 +1,6 @@
 import {Axie, CraftingData, CraftingItem, ERC1155Token, GachaData} from './interfaces';
 import Crafting from './pages/crafting';
-import Gacha from './pages/gacha';
+import Gacha from './pages/garuda';
 
 // calculateMaterials.ts
 const levels: number[] = [1, 10, 20, 30, 40, 50, 60];
@@ -58,13 +58,16 @@ export function calculateBasicRollValue(gachaData:GachaData | null){
     if(!gachaData)
         return 0
 
-    const shellOdds = 0.0006667
-    const basicOdds = 1-shellOdds
+    const shellOdds = 0.06667
+    const basicOdds = 100-shellOdds
 
     const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
     const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
     
-    return ((basicCoco * basicOdds) + (shell * shellOdds))/10
+    const evPreRoll = ((basicCoco * basicOdds) + (shell * shellOdds))/100
+
+    return ethToUsd(evPreRoll,
+    gachaData.exchangeRate.eth.usd)
 }
 
 
@@ -72,23 +75,25 @@ export function calculatePremiumRollValue(gachaData:GachaData | null){
     if(!gachaData)
         return 0
     
-    const shellOdds = 0.002
-    const basicOdds = 0.85
-    const prizeOdds = 0.000003
-    const premiumOdds = 1-basicOdds-shellOdds - prizeOdds
+    const shellOdds = 0.2
+    const basicOdds = 85
+    const prizeOdds = 0.0003
+    const premiumOdds = 100-basicOdds - shellOdds - prizeOdds
     
-    const basicCoco = ethDecimalFormat(gachaData.consumableTokens.results[0].minPrice)
-    const premiumCoco = ethDecimalFormat(gachaData.consumableTokens.results[1].minPrice)
-    const shell = ethDecimalFormat(gachaData.materialTokens.results[0].minPrice)
-    const mysticAxie = ethDecimalFormat(gachaData.mysticAxie.results[0].order.currentPrice)
+    const basicCoco = gachaData.consumableTokens.results[0].minPrice
+    const premiumCoco = gachaData.consumableTokens.results[1].minPrice
+    const shell = gachaData.materialTokens.results[0].minPrice
+    const mysticAxie = gachaData.mysticAxie.results[0].order.currentPrice
     
-    return (
-        (
-            (basicCoco * basicOdds) + 
-            (premiumCoco * premiumOdds) + 
-            (shell * shellOdds) + 
-            (mysticAxie * prizeOdds)
-        )/50
+    const evPreRoll = (
+        (basicCoco * basicOdds) + 
+        (premiumCoco * premiumOdds) + 
+        (shell * shellOdds) + 
+        (mysticAxie * prizeOdds)
+    )/100
+    return ethDecimalFormatUsd(evPreRoll
+        /5,
+        gachaData.exchangeRate.eth.usd
     )
 }
 

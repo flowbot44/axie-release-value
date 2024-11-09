@@ -6,23 +6,25 @@ export async function fetchAxieMaterialData(axieId:number) {
     const query = {
         query: `
             {
-            axie(axieId: "${axieId}") {
-                breedCount
-                axpInfo {
-                level
+                axie(axieId: "${axieId}") {
+                    breedCount
+                    axpInfo {
+                    level
+                    }
+                    class
+                    parts {
+                    class
+                    }
                 }
-                class
-                parts {
-                class
+                erc1155Tokens(tokenType: Material) {
+                    results {
+                    attributes
+                    minPrice
+                    name
+                    }
                 }
-            }
-            erc1155Tokens(tokenType: Material) {
-                results {
-                attributes
-                minPrice
-                name
-                }
-            }
+                    
+
             }
         `,
     };
@@ -74,6 +76,11 @@ export async function fetchGachaItemData() {
                         order {
                             currentPrice
                         }
+                    }
+                }
+                exchangeRate {
+                    eth {
+                        usd
                     }
                 }
             }

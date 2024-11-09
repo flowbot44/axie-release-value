@@ -18,7 +18,7 @@ const NavBar: React.FC = () => {
         <Flex direction="row" alignItems="center" gap="1rem">
           <Link href="/">Home</Link>
           <Link href="/releasevalue">Release Value</Link>
-          <Link href="/gacha">Gacha</Link>
+          <Link href="/garuda">Garuda</Link>
           <Link href="/crafting">Crafting</Link>
 
           {user ? (
