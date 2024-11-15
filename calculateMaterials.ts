@@ -15,7 +15,10 @@ const estimatedMaterials: number[][] = [
 ];
 
 function getPreviousLevel(inputLevel: number): number {
-    return levels.reduce((a, b) => (b <= inputLevel && b > a) ? b : a, -Infinity);
+    return levels.reduce((maxLevel, currentLevel) => 
+        (currentLevel <= inputLevel && currentLevel > maxLevel) ? currentLevel : maxLevel, 
+        -Infinity
+    );
 }
 
 export function queryMaterials(level: number, breedCount: number): number {
@@ -39,18 +42,18 @@ export function calculateMaterialValue(axieData: Axie, materialMarketPrice:ERC11
         const partClassSum = matchingTokens.reduce((subSum, token) => subSum + token.minPrice * partMats, 0);
         return sum + partClassSum ;
     }, 0);
-    return +(ethDecimalFormat(ethTotal)).toFixed(5)
+    return ethDecimalFormat(ethTotal)
 }
 
 function ethDecimalFormatUsd(ethTotal: number,ethUsdPrice:number){
     return ethToUsd(ethDecimalFormat(ethTotal), ethUsdPrice)
 }
 
-function ethDecimalFormat(ethTotal: number) {
+export function ethDecimalFormat(ethTotal: number) : number {
     return ethTotal / Math.pow(10, 18);
 }
 
-function ethToUsd(ethValue: number, ethUsdPrice:number){
+export function ethToUsd(ethValue: number, ethUsdPrice:number){
     return ethValue * ethUsdPrice
 }
 

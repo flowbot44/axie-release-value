@@ -1,7 +1,9 @@
 export interface Axie {
+    id: number;
     breedCount: number;
     axpInfo: {
       level: number;
+      shouldAscend:string;
     };
     class: string;
     order: {
@@ -37,7 +39,7 @@ export interface Data {
     mysticAxie: {
       results: Axie[];
     };
-    exchangeRate: ExchangeRate
+    exchangeRate: ExchangeRate;
   }
 
   export interface CraftingData {
@@ -47,7 +49,7 @@ export interface Data {
     materialTokens: {
       results: ERC1155Token[];
     };
-    exchangeRate: ExchangeRate
+    exchangeRate: ExchangeRate;
   }
 
   export interface CraftingItem {
@@ -62,5 +64,18 @@ export interface Data {
       eth: {
         usd: number;
       };
+
+  }
+
+  export interface MarketAxieData{
+    
+    erc1155Tokens: {
+      results: ERC1155Token[];
+    };
+    marketAxies: {
+      results: Axie[];
+      total: number;
+    }
+    exchangeRate: ExchangeRate;
 
   }

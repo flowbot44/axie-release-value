@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
         </Text>
         
         <Flex direction="row" alignItems="center" gap="1rem">
-          <Link href="/">Home</Link>
+          <Link href="/releasemarket">Release Market</Link>
           <Link href="/releasevalue">Release Value</Link>
           <Link href="/garuda">Garuda</Link>
           <Link href="/crafting">Crafting</Link>
