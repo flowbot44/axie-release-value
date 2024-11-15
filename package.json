@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.1.13",
-    "@next/swc-win32-x64-msvc": "^15.0.3",
     "aws-amplify": "^6.4.0",
     "axios": "^1.7.7",
     "next": "^14.2.18",
     "react": "^18",
     "react-dom": "^18"
+  },
+  "overrides": {
+    "@next/swc": "*"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.0.4",
