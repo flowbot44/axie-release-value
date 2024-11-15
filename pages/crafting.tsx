@@ -1,6 +1,6 @@
 // pages/crafting.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { fetchCraftingItemData } from  "../axieMarketplace"
 import { CraftingItem } from "../interfaces"
 import { calculateCraftingInfo} from '../calculateMaterials'
@@ -9,18 +9,19 @@ const Crafting: React.FC = () => {
 
     const [error, setError] = useState<string | null>(null);
     const [craftingItems, setCraftingItems] = useState<CraftingItem[]>([]);
+
+    const fetchCraftingValues = useCallback(async () => {
+      try {
+        const data = await fetchCraftingItemData(); // Add your endpoint here
+      setCraftingItems(calculateCraftingInfo(data.data))
+      } catch (error) {
+          console.error('Error fetching gacha values:', error);
+          setError('Failed to fetch gacha values. Please try again later.');
+        }
+      }, []);
    
     useEffect(() => {
-        const fetchCraftingValues = async () => {
-            try {
-              const data = await fetchCraftingItemData(); // Add your endpoint here
-            setCraftingItems(calculateCraftingInfo(data.data))
-            } catch (error) {
-                console.error('Error fetching gacha values:', error);
-                setError('Failed to fetch gacha values. Please try again later.');
-              }
-            };
-            fetchCraftingValues();
+      fetchCraftingValues();
     }, []);
 
 return (

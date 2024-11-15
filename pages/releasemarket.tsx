@@ -1,4 +1,4 @@
-import { useState, useEffect, Key } from 'react';
+import { useState, useEffect, Key, useCallback } from 'react';
 import { fetchMarketAxiesData } from  "../axieMarketplace"
 import { Axie, MarketAxieData } from '@/interfaces';
 import AxieCard from '../components/AxieCard';
@@ -6,16 +6,17 @@ import { Grid } from '@aws-amplify/ui-react';
 
 const SkyMavisPage: React.FC = () => {
   const [marketAxieData, setMarketAxieData] = useState<MarketAxieData>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [nextToken, setNextToken] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [nextToken, setNextToken] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const fetchData = async (pageToken: number | null = null) => {
+  const fetchData = useCallback(async (pageToken: number) => {
 
 
     try {
       const limit = 12; // Number of items per page
-      const data = await fetchMarketAxiesData(currentPage, limit);
+      //console.log(pageToken)
+      const data = await fetchMarketAxiesData(pageToken, limit);
 
       setMarketAxieData(data.data);
       setTotalPages(+(data.data!.marketAxies.total/limit).toFixed(0))
@@ -23,19 +24,18 @@ const SkyMavisPage: React.FC = () => {
     } catch (error) {
       console.error("Failed to fetch data", error);
     } 
-  };
+  }, [currentPage])
 
   // Trigger fetching more data when scrolling to the bottom
   useEffect(() => {
-    
-    fetchData(nextToken);
-  }, [currentPage]);
+    fetchData(currentPage);
+  }, []);
 
    // Handle page navigation
    const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
     // Fetch data based on nextToken or implement custom page handling
-    fetchData(nextToken);
+    fetchData(newPage);
   };
 
   return (
