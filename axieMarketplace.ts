@@ -123,7 +123,7 @@ export async function fetchCraftingItemData() {
     return await fetchData(query);
 }
 
-export async function fetchMarketAxiesData(page: number, limit: number) {
+export async function fetchMarketAxiesData(page: number, limit: number, breedCount: number, level: number) {
     const query = {
         query: `{
                 erc1155Tokens(tokenType: Material) {
@@ -133,7 +133,7 @@ export async function fetchMarketAxiesData(page: number, limit: number) {
                     }
                 }
                 marketAxies: axies(
-                    criteria: {level: [10, 60], breedCount: [3, 7]}
+                    criteria: {level: [${level}, 60], breedCount: [${breedCount}, 7]}
                     auctionType: Sale
                     from: ${(page * limit) - limit}
                     size: ${limit}

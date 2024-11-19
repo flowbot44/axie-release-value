@@ -3,7 +3,7 @@ export interface Axie {
     breedCount: number;
     axpInfo: {
       level: number;
-      shouldAscend:string;
+      shouldAscend:boolean;
     };
     class: string;
     order: {

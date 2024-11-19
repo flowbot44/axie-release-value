@@ -27,20 +27,23 @@ export function queryMaterials(level: number, breedCount: number): number {
     return estimatedMaterials[levelIndex][breedCount];
 }
 
-export function calculateMaterialValue(axieData: Axie, materialMarketPrice:ERC1155Token[]){
-    var ethTotal = 0;
-    const totalMaterals = queryMaterials(axieData.axpInfo.level,axieData.breedCount)
-    const bodyMats = totalMaterals * .25
-    const partMats = totalMaterals * .125
-    const bodyPartMat = materialMarketPrice.filter(token => token.attributes.class === axieData.class)
-    ethTotal += bodyPartMat[0].minPrice * bodyMats
-    
+export function queryMaterialsAxie(axie:Axie): number {
+    const axieMatLvl = axie.axpInfo.shouldAscend ? axie.axpInfo.level + 1 : axie.axpInfo.level
+    return queryMaterials(axieMatLvl,axie.breedCount)
+}
 
+export function calculateMaterialValue(axieData: Axie, materialMarketPrice: ERC1155Token[]) {
+    let ethTotal = 0;
+    const totalMaterials = queryMaterialsAxie(axieData)
+    const bodyMats = totalMaterials * .25
+    const partMats = totalMaterials * .125
+    const materialPriceMap = new Map(materialMarketPrice.map(token => [token.attributes.class, token.minPrice]));
+    ethTotal += (materialPriceMap.get(axieData.class) || 0) * bodyMats
 
     ethTotal += axieData.parts.reduce((sum, partClass) => {
         const matchingTokens = materialMarketPrice.filter(token => token.attributes.class === partClass.class);
         const partClassSum = matchingTokens.reduce((subSum, token) => subSum + token.minPrice * partMats, 0);
-        return sum + partClassSum ;
+        return sum + partClassSum;
     }, 0);
     return ethDecimalFormat(ethTotal)
 }

@@ -22,7 +22,7 @@ const Crafting: React.FC = () => {
    
     useEffect(() => {
       fetchCraftingValues();
-    }, []);
+    }, [fetchCraftingValues]);
 
 return (
     <div style={{ padding: '20px' }}>

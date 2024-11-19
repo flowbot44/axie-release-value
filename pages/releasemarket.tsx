@@ -10,26 +10,30 @@ const SkyMavisPage: React.FC = () => {
   const [nextToken, setNextToken] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
+  const [breedCount, setBreedCount] = useState<number>(3);
+  const [level, setLevel] = useState<number>(10);
+
   const fetchData = useCallback(async (pageToken: number) => {
 
 
     try {
       const limit = 12; // Number of items per page
-      //console.log(pageToken)
-      const data = await fetchMarketAxiesData(pageToken, limit);
 
+      //console.log(pageToken)
+      const data = await fetchMarketAxiesData(pageToken, limit, breedCount, level);
+      setCurrentPage(pageToken)
       setMarketAxieData(data.data);
       setTotalPages(+(data.data!.marketAxies.total/limit).toFixed(0))
       setNextToken(currentPage+1)
     } catch (error) {
       console.error("Failed to fetch data", error);
     } 
-  }, [currentPage])
+  }, [breedCount, currentPage, level])
 
   // Trigger fetching more data when scrolling to the bottom
   useEffect(() => {
     fetchData(currentPage);
-  }, []);
+  }, [currentPage, fetchData]);
 
    // Handle page navigation
    const handlePageChange = (newPage: number) => {
@@ -38,9 +42,57 @@ const SkyMavisPage: React.FC = () => {
     fetchData(newPage);
   };
 
+  // Handle page navigation
+  const handleBreedCountChange = (newBreedCount: number) => {
+    setBreedCount(newBreedCount);
+
+    // Fetch data based on nextToken or implement custom page handling
+    fetchData(1);
+  };
+
+  // Handle page navigation
+  const handleLevelChange = (newLevel: number) => {
+    setLevel(newLevel);
+
+    // Fetch data based on nextToken or implement custom page handling
+    fetchData(1);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Axie Market</h1>
+
+      <div>
+      <label>
+        Min Breed Count:
+        <select value={breedCount} onChange={(e) => handleBreedCountChange(Number(e.target.value))}>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </label>
+      <label>
+        Min Level:
+        <select value={level} onChange={(e) => handleLevelChange(Number(e.target.value))}>
+          <option value="1">1</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="39">39</option>
+          <option value="40">40</option>
+        </select>
+      </label>
+
+    </div>
+
       {marketAxieData ? (
       <Grid
       templateColumns={{ base: "1fr", medium: "repeat(2, 1fr)", large: "repeat(4, 1fr)" }}
