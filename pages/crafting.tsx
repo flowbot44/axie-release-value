@@ -57,7 +57,7 @@ return (
         </tbody>
       </table>
     </div>
-    <AxpCocoTable materials={craftingData?.consumableTokens.results} ethUsd={craftingData?.exchangeRate.eth.usd}/>
+    <AxpCocoTable materials={craftingData!.consumableTokens.results} ethUsd={craftingData!.exchangeRate.eth.usd}/>
         </>
       )}
       </div>
