@@ -2,17 +2,20 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { fetchCraftingItemData } from  "../axieMarketplace"
-import { CraftingItem } from "../interfaces"
+import { CraftingData, CraftingItem } from "../interfaces"
 import { calculateCraftingInfo} from '../calculateMaterials'
+import AxpCocoTable from '@/components/AxpCocoTable';
 
 const Crafting: React.FC = () => {
 
     const [error, setError] = useState<string | null>(null);
     const [craftingItems, setCraftingItems] = useState<CraftingItem[]>([]);
+    const [craftingData, setCraftingData] = useState<CraftingData | null>(null);
 
     const fetchCraftingValues = useCallback(async () => {
       try {
         const data = await fetchCraftingItemData(); // Add your endpoint here
+        setCraftingData(data.data)
       setCraftingItems(calculateCraftingInfo(data.data))
       } catch (error) {
           console.error('Error fetching gacha values:', error);
@@ -54,6 +57,7 @@ return (
         </tbody>
       </table>
     </div>
+    <AxpCocoTable materials={craftingData?.consumableTokens.results} ethUsd={craftingData?.exchangeRate.eth.usd}/>
         </>
       )}
       </div>

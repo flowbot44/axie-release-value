@@ -98,8 +98,8 @@ export async function fetchCraftingItemData() {
             {
                 consumableTokens: erc1155Tokens(tokenIds: ["1","2","3","4"], tokenType: Consumable) {
                     results {
-                    name
-                    minPrice
+                        name
+                        minPrice
                     }
                 }
                 materialTokens: erc1155Tokens(
@@ -107,8 +107,8 @@ export async function fetchCraftingItemData() {
                     tokenType: Material
                 ) {
                     results {
-                    name
-                    minPrice
+                        name
+                        minPrice
                     }
                 }
                 exchangeRate {

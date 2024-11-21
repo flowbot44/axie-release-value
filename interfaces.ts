@@ -59,6 +59,13 @@ export interface Data {
     profit: number;
   };
 
+  export interface AxpCocoItem {
+    name: string;
+    axp: number;
+    marketPrice: number;
+    pricePerAxp: number;
+  };
+
   export interface ExchangeRate {
 
       eth: {

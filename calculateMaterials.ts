@@ -1,4 +1,4 @@
-import {Axie, CraftingData, CraftingItem, ERC1155Token, GachaData} from './interfaces';
+import {Axie, AxpCocoItem, CraftingData, CraftingItem, ERC1155Token, GachaData} from './interfaces';
 import Crafting from './pages/crafting';
 import Gacha from './pages/garuda';
 
@@ -139,3 +139,31 @@ function calculateDarkFlame(plantMemento: ERC1155Token, aquaMemento: ERC1155Toke
 
 }
 
+
+export function calcAxpCocoItems(craftingData:ERC1155Token[] | null, ethPrice: number| null){
+    const items: AxpCocoItem[] = []
+    
+    if (!craftingData || !ethPrice) {
+        return items
+    }
+    
+    
+    const premiumCoco = craftingData?.find(item => item.name === "Premium Cocochoco")
+    const coco = craftingData?.find(item => item.name === "Cocochoco")
+    const superCoco = craftingData?.find(item => item.name === "Super Cocochoco")
+
+    items.push(createAxpCocoItem(coco!.name,50,ethDecimalFormatUsd(coco!.minPrice,ethPrice)))
+    items.push(createAxpCocoItem(premiumCoco!.name,200,ethDecimalFormatUsd(premiumCoco!.minPrice,ethPrice)))
+    items.push(createAxpCocoItem(superCoco!.name,15000,ethDecimalFormatUsd(superCoco!.minPrice,ethPrice)))
+    
+    return items
+}
+
+const createAxpCocoItem = (name: string, axp: number, marketPrice: number): AxpCocoItem => {
+    return {
+      name,
+      axp,
+      marketPrice,
+      pricePerAxp: marketPrice / axp * 50,
+    };
+  };
