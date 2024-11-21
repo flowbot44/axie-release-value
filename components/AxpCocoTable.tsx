@@ -5,16 +5,23 @@ import React from 'react';
 
 interface AxpCocoProps {
     ethUsd: number|null;
-    materials: ERC1155Token[]|null;
+    materials: ERC1155Token[];
   }
 
 const AxpCocoTable: React.FC<AxpCocoProps> = ({ materials, ethUsd }) => {
+    
     const items: AxpCocoItem[] = calcAxpCocoItems(materials, ethUsd)
 
     
 
     
   return (
+    <div style={{ padding: '20px' }}>
+      <h1>Coco AXP  </h1>  
+      
+      {!items ? (
+        <p style={{ color: 'red' }}>{items}</p>
+      ) : (
     <div className="overflow-x-auto">
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
@@ -36,6 +43,8 @@ const AxpCocoTable: React.FC<AxpCocoProps> = ({ materials, ethUsd }) => {
           ))}
         </tbody>
       </table>
+    </div>
+      )}
     </div>
   );
 };
